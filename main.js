@@ -1,38 +1,57 @@
-function newStyle() {
-  let newColor = '';
-  let newFont = ''; 
-  let x = Math.floor(Math.random()*7); 
-  switch (x){
-    case 0:
-      newColor = 'red';
-      newFont = 'Times New Roman'; 
-      break;
-    case 1: 
-      newColor = 'blue';
-      newFont = 'Florence, cursive'; 
-      break;
-    case 2:
-      newColor = 'yellow';
-      newFont = 'Verdana';
-      break; 
-    case 3:
-      newColor= 'purple';
-      newFont = 'Courier New';
-      break
-    case 4:
-      newColor = 'cyan';
-      newFont = 'Georgia'; 
-      break;
-    case 5:
-        newColor = 'maroon';
-        newFont = 'Palatino';
-        break;
-    case 6: 
-        newColor = 'lime';
-        newFont = 'Impact';
-        break;
+function clearForm() {
+  const sheet = SpreadsheetApp.openById("1nnnZ09L_4E6T5kdMPqC_CFBrLZLlMexEuSc3pXej7EM").getSheetByName("Form");
+  sheet.getRange("A5:A20").clearContent();
+  sheet.getRange("C5:C20").clearContent();
+}
+
+
+function generateList() {
+  const criteria = getCheckedItems("A5:B20");
+  const services = getCheckedItems("C5:D20");
+Logger.log(criteria);
+  const fullArray = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Services").getRange("A2:F650").getValues();
+
+  const filteredArray = filterArray(criteria, fullArray, 1);
+  Logger.log(filteredArray.length);
+  const refilteredArray = filterArray(services, filteredArray, 2);
+
+  const numRows = refilteredArray.length;
+  Logger.log(numRows);
+
+  const outputSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Output");
+  outputSheet.getRange(2, 1, outputSheet.getLastRow(), outputSheet.getLastColumn()).clearContent();
+  outputSheet.getRange(2,1,numRows, 6).setValues(refilteredArray);
+}
+
+
+function filterArray(filterCriteria, unfilteredArray, colToCheck) {
+
+let filteredArray = [];
+
+if (filterCriteria.length != 0) {  //If there are any criteria at all
+  for (i=0; i<filterCriteria.length; i++) {  //then filter by each of them
+    for (j=0; j<unfilteredArray.length; j++) {  //going through every row of the whole unfiltered array
+      if (unfilteredArray[j][colToCheck].includes(filterCriteria[i].toString())) {
+        filteredArray.push(unfilteredArray[j])
+      }
+    }
   }
-  var elem = document.getElementById('logo');
-  elem.style.color = newColor;
-  elem.style.fontFamily = newFont; 
+}else{                              //Otherwise, return the unfiltered array
+  filteredArray = unfilteredArray;
+}
+return filteredArray;
+}
+
+
+function getCheckedItems(range) {
+  const sheet = SpreadsheetApp.openById("1nnnZ09L_4E6T5kdMPqC_CFBrLZLlMexEuSc3pXej7EM").getSheetByName("Form");
+  const values = sheet.getRange(range).getValues();
+  let array = [];
+  for (let i = 0; i < values.length; i++) {
+    if (values[i][0] == true) {
+      array.push(values[i][1])
+    }
+  }
+
+return array
 }
