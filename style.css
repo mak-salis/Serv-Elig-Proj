@@ -1,4 +1,8 @@
 h1 {
-  color: teal;
+  color: rgb(3, 85, 85);
   text-align: center;
+}
+
+form input{
+  color: rebeccapurple;
 }
