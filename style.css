@@ -1,8 +1,25 @@
+* {
+  box-sizing: border-box;
+}
+
 h1 {
-  color: rgb(3, 85, 85);
+  color: teal;
   text-align: center;
 }
 
-form input{
-  color: rebeccapurple;
+.criteria {
+  float: left;
+  width: 45%;
+  background-color: lightseagreen;
+  padding: 40px 40px;
+  margin: 10px 10px;
+  
+}
+
+.services {
+  float: right;
+  width: 45%;
+  background-color: lightseagreen;
+  padding: 40px 40px;
+  margin: 10px 10px;
 }
